@@ -32,6 +32,8 @@ namespace EXTC10.Cloud.Integration.DAO.SQL
 
                 sqlDataReader = await sqlCommand.ExecuteReaderAsync();
 
+
+                //Test this file
                 while (await sqlDataReader.ReadAsync())
                 {
                     ApplicationConfiguration applicationConfiguration = new ApplicationConfiguration();
