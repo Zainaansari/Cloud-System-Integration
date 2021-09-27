@@ -74,5 +74,50 @@ namespace EXTC10.Cloud.Integration.DAO.SQL
 
             return applicationConfigurationsList;
         }
+
+        public async Task<bool> AddNewKeyValueInConfigurationsAsync (ApplicationConfiguration applicationConfiguration)
+        {
+            SqlConnection sqlConnection=null;
+            SqlCommand sqlCommand=null;
+            bool returnValue;
+
+            try
+            {
+                sqlConnection = new SqlConnection(DatabaseConnectionString);
+
+                sqlCommand = new SqlCommand();
+                sqlCommand.Connection = sqlConnection;
+                sqlCommand.CommandText = SQLConstant.ADDNEWKEYVALUEINCONFIGURATIONS;
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                sqlCommand.CommandTimeout = 0;
+
+                sqlCommand.Parameters.AddWithValue("@ConfigKey", applicationConfiguration.ConfigKey);
+                sqlCommand.Parameters.AddWithValue("@ConfigValue", applicationConfiguration.ConfigValue);
+                sqlCommand.Parameters.AddWithValue("@CreatedBy", applicationConfiguration.CreatedBy);
+
+
+                if (sqlConnection.State == System.Data.ConnectionState.Closed)
+                   await sqlConnection.OpenAsync();
+
+               await sqlCommand.ExecuteNonQueryAsync();
+
+                returnValue = true;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                if (sqlCommand != null)
+                    await sqlCommand.DisposeAsync();
+
+                if (sqlConnection != null && sqlConnection.State == System.Data.ConnectionState.Open)
+                    await sqlConnection.CloseAsync();
+            }
+
+            return returnValue;
+        }
     }
 }
