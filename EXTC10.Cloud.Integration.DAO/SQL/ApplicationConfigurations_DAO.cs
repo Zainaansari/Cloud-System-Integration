@@ -10,6 +10,8 @@ namespace EXTC10.Cloud.Integration.DAO.SQL
     public class ApplicationConfigurations_DAO
     {
         public string DatabaseConnectionString { get; set; }
+
+        //GETALL
         public async Task<List<ApplicationConfiguration>> GetAllConfigurationKeysAndValues()
         {
             List<ApplicationConfiguration> applicationConfigurationsList = new List<ApplicationConfiguration>();
@@ -75,6 +77,73 @@ namespace EXTC10.Cloud.Integration.DAO.SQL
             return applicationConfigurationsList;
         }
 
+        public async Task<ApplicationConfiguration> GetConfigurationValueByConfigKey(string configKey)
+        {
+            ApplicationConfiguration applicationConfiguration = new ApplicationConfiguration();
+            SqlDataReader sqlDataReader = null;
+            SqlConnection sqlConnection = null;
+            SqlCommand sqlCommand = null;
+            try
+            {
+               // @ConfigKey
+                sqlConnection = new SqlConnection(DatabaseConnectionString);
+                sqlCommand = new SqlCommand();
+
+                sqlCommand.CommandText = SQLConstant.GETALLCONFIGURATIONKEYSANDVALUES;
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                sqlCommand.CommandTimeout = 0;
+
+                sqlCommand.Parameters.AddWithValue("@ConfigKey", configKey);
+
+                if (sqlConnection.State == System.Data.ConnectionState.Closed)
+                    sqlConnection.Open();
+
+                sqlDataReader = await sqlCommand.ExecuteReaderAsync();
+
+
+                //Test this file
+                while (await sqlDataReader.ReadAsync())
+                {
+                    
+
+                    /*if (sqlDataReader["Config_Key"] != DBNull.Value)
+                        applicationConfiguration.ConfigKey = Convert.ToString(sqlDataReader["Config_Key"]);
+                    else
+                        applicationConfiguration.ConfigKey = "";*/
+
+
+                    applicationConfiguration.ConfigKey = sqlDataReader["Config_Key"] != DBNull.Value ? Convert.ToString(sqlDataReader["Config_Key"]) : "";
+                    applicationConfiguration.ConfigValue = sqlDataReader["Config_Value"] != DBNull.Value ? Convert.ToString(sqlDataReader["Config_Value"]) : "";
+                    applicationConfiguration.CreatedBy = sqlDataReader["Created_By"] != DBNull.Value ? Convert.ToString(sqlDataReader["Created_By"]) : "";
+                    applicationConfiguration.CreatedDate = sqlDataReader["Created_Date"] != DBNull.Value ? Convert.ToDateTime(sqlDataReader["Created_By"]) : DateTime.MinValue;
+
+                    applicationConfiguration.UpdatedBy = sqlDataReader["Updated_By"] != DBNull.Value ? Convert.ToString(sqlDataReader["Updated_By"]) : "";
+                    applicationConfiguration.UpdatedDate = sqlDataReader["Updated_Date"] != DBNull.Value ? Convert.ToDateTime(sqlDataReader["Updated_Date"]) : DateTime.MinValue;
+                    
+
+
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            finally
+            {
+                if (sqlDataReader != null && !sqlDataReader.IsClosed)
+                    await sqlDataReader.CloseAsync();
+
+                if (sqlCommand != null)
+                    await sqlCommand.DisposeAsync();
+
+                if (sqlConnection != null && sqlConnection.State == System.Data.ConnectionState.Open)
+                    await sqlConnection.CloseAsync();
+            }
+
+            return applicationConfiguration;
+        }
+        //INSERT
+
         public async Task<bool> AddNewKeyValueInConfigurationsAsync (ApplicationConfiguration applicationConfiguration)
         {
             SqlConnection sqlConnection=null;
@@ -100,6 +169,52 @@ namespace EXTC10.Cloud.Integration.DAO.SQL
                    await sqlConnection.OpenAsync();
 
                await sqlCommand.ExecuteNonQueryAsync();
+
+                returnValue = true;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                if (sqlCommand != null)
+                    await sqlCommand.DisposeAsync();
+
+                if (sqlConnection != null && sqlConnection.State == System.Data.ConnectionState.Open)
+                    await sqlConnection.CloseAsync();
+            }
+
+            return returnValue;
+        }
+
+
+        //UPADATE
+        public async Task<bool> UpdateValueInConfigurationByConfigKeyAsync(ApplicationConfiguration applicationConfiguration)
+        {
+            SqlConnection sqlConnection = null;
+            SqlCommand sqlCommand = null;
+            bool returnValue;
+
+            try
+            {
+                sqlConnection = new SqlConnection(DatabaseConnectionString);
+
+                sqlCommand = new SqlCommand();
+                sqlCommand.Connection = sqlConnection;
+                sqlCommand.CommandText = SQLConstant.UPDATEVALUEINCONFIGURATIONBYCONFIGKEY;
+                sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                sqlCommand.CommandTimeout = 0;
+
+                sqlCommand.Parameters.AddWithValue("@ConfigKey", applicationConfiguration.ConfigKey);
+                sqlCommand.Parameters.AddWithValue("@ConfigValue", applicationConfiguration.ConfigValue);
+                sqlCommand.Parameters.AddWithValue("@UpdatedBy", applicationConfiguration.UpdatedBy);
+
+                if (sqlConnection.State == System.Data.ConnectionState.Closed)
+                    await sqlConnection.OpenAsync();
+
+                await sqlCommand.ExecuteNonQueryAsync();
 
                 returnValue = true;
             }
