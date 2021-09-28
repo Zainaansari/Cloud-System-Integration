@@ -7,10 +7,30 @@ using EXTC10.Cloud.Integration.Entities;
 
 namespace EXTC10.Cloud.Integration.DAO.SQL
 {
+    /// <summary>
+    /// The message storage data access object.
+    /// </summary>
     public class MessageStorage_DAO
     {
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MessageStorage_DAO"/> class.
+        /// </summary>
+        /// <param name="databaseConnectionString">The database connection string.</param>
+        public MessageStorage_DAO(string databaseConnectionString)
+        {
+            DatabaseConnectionString = databaseConnectionString;
+        }
+        /// <summary>
+        /// Gets or sets the database connection string.
+        /// </summary>
         public string DatabaseConnectionString { get; set; }
 
+        /// <summary>
+        /// Adds the request message in store async.
+        /// </summary>
+        /// <param name="MessageStorage">The message storage.</param>
+        /// <returns>A Task<bool>.</returns>
         public async Task<bool> AddRequestMessageInStoreAsync(MessageStorage MessageStorage)
         {
             SqlConnection sqlConnection = null;
@@ -56,6 +76,11 @@ namespace EXTC10.Cloud.Integration.DAO.SQL
             return returnValue;
         }
 
+        /// <summary>
+        /// Gets the request message by id.
+        /// </summary>
+        /// <param name="requestId">The request id.</param>
+        /// <returns>A Task<bool>.</returns>
         public async Task<MessageStorage> GetRequestMessageById(string requestId)
         {
             MessageStorage messageStorage = new MessageStorage();

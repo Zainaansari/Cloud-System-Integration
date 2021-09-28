@@ -10,7 +10,6 @@ namespace EXTC10.Cloud.Integration.Entities
         public string SourceSystem { get; set; }
         public string TargetSystem { get; set; }
         public string RequestedAction { get; set; }
-
         public DateTime? Requesteddate { get; set; }
         public int RequestStatus { get; set; }
         public DateTime? CreatedDate { get; set; }

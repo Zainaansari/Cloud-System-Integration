@@ -7,12 +7,32 @@ using EXTC10.Cloud.Integration.Entities;
 
 namespace EXTC10.Cloud.Integration.DAO.SQL
 {
-    class RequestQueue_DAO
+    /// <summary>
+    /// The request queue data access object.
+    /// </summary>
+    public class RequestQueue_DAO
     {
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RequestQueue_DAO"/> class.
+        /// </summary>
+        /// <param name="databaseConnectionString">The database connection string.</param>
+        public RequestQueue_DAO(string databaseConnectionString)
+        {
+            DatabaseConnectionString = databaseConnectionString;
+        }
+        /// <summary>
+        /// Gets or sets the database connection string.
+        /// </summary>
         public string DatabaseConnectionString { get; set; }
 
         //INSERT
 
+        /// <summary>
+        /// Adds the request queue entry async.
+        /// </summary>
+        /// <param name="RequestQueue">The request queue.</param>
+        /// <returns>A Task.</returns>
         public async Task<bool> AddRequestQueueEntryAsync(RequestQueue RequestQueue)
         {
             SqlConnection sqlConnection = null;
@@ -62,6 +82,11 @@ namespace EXTC10.Cloud.Integration.DAO.SQL
 
 
         //UPADATE
+        /// <summary>
+        /// Updates the request queue status async.
+        /// </summary>
+        /// <param name="RequestQueue">The request queue.</param>
+        /// <returns>A Task.</returns>
         public async Task<bool> UpdateRequestQueueStatusAsync(RequestQueue RequestQueue)
         {
             SqlConnection sqlConnection = null;
@@ -106,6 +131,11 @@ namespace EXTC10.Cloud.Integration.DAO.SQL
             return returnValue;
         }
 
+        /// <summary>
+        /// Gets the request queue by id.
+        /// </summary>
+        /// <param name="requestId">The request id.</param>
+        /// <returns>A Task.</returns>
         public async Task<RequestQueue> GetRequestQueuebyId(string requestId)
         {
             RequestQueue requestQueue = new RequestQueue();

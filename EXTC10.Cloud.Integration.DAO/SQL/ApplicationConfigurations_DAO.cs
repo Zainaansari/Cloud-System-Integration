@@ -7,11 +7,30 @@ using System.Threading.Tasks;
 
 namespace EXTC10.Cloud.Integration.DAO.SQL
 {
+    /// <summary>
+    /// The application configurations data access objects.
+    /// </summary>
     public class ApplicationConfigurations_DAO
     {
+        /// <summary>
+        /// Gets or sets the database connection string.
+        /// </summary>
         public string DatabaseConnectionString { get; set; }
 
-        //GETALL
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ApplicationConfigurations_DAO"/> class.
+        /// </summary>
+        /// <param name="databaseConnectionString">The database connection string.</param>
+        public ApplicationConfigurations_DAO(string databaseConnectionString)
+        {
+            DatabaseConnectionString = databaseConnectionString;
+        }
+
+
+        /// <summary>
+        /// Gets the all configuration keys and values.
+        /// </summary>
+        /// <returns>A Task<List<ApplicationConfiguration>></returns>
         public async Task<List<ApplicationConfiguration>> GetAllConfigurationKeysAndValues()
         {
             List<ApplicationConfiguration> applicationConfigurationsList = new List<ApplicationConfiguration>();
@@ -77,6 +96,11 @@ namespace EXTC10.Cloud.Integration.DAO.SQL
             return applicationConfigurationsList;
         }
 
+        /// <summary>
+        /// Gets the configuration value by config key.
+        /// </summary>
+        /// <param name="configKey">The config key.</param>
+        /// <returns>A Task<ApplicationConfiguration>.</returns>
         public async Task<ApplicationConfiguration> GetConfigurationValueByConfigKey(string configKey)
         {
             ApplicationConfiguration applicationConfiguration = new ApplicationConfiguration();
@@ -144,6 +168,11 @@ namespace EXTC10.Cloud.Integration.DAO.SQL
         }
         //INSERT
 
+        /// <summary>
+        /// Adds the new key value in configurations async.
+        /// </summary>
+        /// <param name="applicationConfiguration">The application configuration.</param>
+        /// <returns>A Task<bool>.</returns>
         public async Task<bool> AddNewKeyValueInConfigurationsAsync (ApplicationConfiguration applicationConfiguration)
         {
             SqlConnection sqlConnection=null;
@@ -191,6 +220,11 @@ namespace EXTC10.Cloud.Integration.DAO.SQL
 
 
         //UPADATE
+        /// <summary>
+        /// Updates the value in configuration by config key async.
+        /// </summary>
+        /// <param name="applicationConfiguration">The application configuration.</param>
+        /// <returns>A Task<bool>.</returns>
         public async Task<bool> UpdateValueInConfigurationByConfigKeyAsync(ApplicationConfiguration applicationConfiguration)
         {
             SqlConnection sqlConnection = null;

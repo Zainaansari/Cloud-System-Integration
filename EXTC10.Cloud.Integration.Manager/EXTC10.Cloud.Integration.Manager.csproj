@@ -4,4 +4,14 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Azure.Messaging.ServiceBus" Version="7.3.0" />
+    <PackageReference Include="Microsoft.Azure.ServiceBus" Version="5.1.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EXTC10.Cloud.Integration.DAO\EXTC10.Cloud.Integration.DAO.csproj" />
+    <ProjectReference Include="..\EXTC10.Cloud.Integration.Entities\EXTC10.Cloud.Integration.Entities.csproj" />
+  </ItemGroup>
+
 </Project>
