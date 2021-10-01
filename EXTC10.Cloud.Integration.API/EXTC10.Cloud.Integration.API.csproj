@@ -4,5 +4,14 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EXTC10.Cloud.Integration.Entities\EXTC10.Cloud.Integration.Entities.csproj" />
+    <ProjectReference Include="..\EXTC10.Cloud.Integration.Manager\EXTC10.Cloud.Integration.Manager.csproj" />
+  </ItemGroup>
+
 
 </Project>

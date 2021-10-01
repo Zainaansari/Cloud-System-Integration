@@ -1,5 +1,6 @@
 ﻿using EXTC10.Cloud.Integration.DAO.SQL;
 using EXTC10.Cloud.Integration.Entities;
+using EXTC10.Cloud.Integration.Manager.Helper;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,7 +11,7 @@ namespace EXTC10.Cloud.Integration.Manager
     /// <summary>
     /// The request queue.
     /// </summary>
-    public class RequestQueue
+    public class RequestQueueManager
     {
         /// <summary>
         /// Gets or sets the database connection string.
@@ -23,7 +24,7 @@ namespace EXTC10.Cloud.Integration.Manager
         /// Initializes a new instance of the <see cref="MessageStore"/> class.
         /// </summary>
         /// <param name="databaseConnectionString">The database connection string.</param>
-        public RequestQueue(string databaseConnectionString)
+        public RequestQueueManager(string databaseConnectionString)
         {
             DatabaseConnectionString = databaseConnectionString;
             requestQueue_DAO = new RequestQueue_DAO(DatabaseConnectionString);
@@ -59,13 +60,38 @@ namespace EXTC10.Cloud.Integration.Manager
             return await requestQueue_DAO.GetRequestQueuebyId(requestId);
         }
 
-        public async Task<bool> AddIntegrationRequestInQueue(QueueMessage queueMessage)
+        public async Task<string> AddIntegrationRequestInQueue(QueueMessage queueMessage)
         {
             queueMessage.RequestId = System.Guid.NewGuid().ToString();
 
 
+            //1. Store Message in MessageStore
+            MessageStorage_DAO messageStorage_DAO = new MessageStorage_DAO(DatabaseConnectionString);
 
-            return true;
+            MessageStorage messageStorage = new MessageStorage();
+            messageStorage.MessageContent = queueMessage.MessageContent;
+            messageStorage.RequestId = queueMessage.RequestId;
+
+            await messageStorage_DAO.AddRequestMessageInStoreAsync(messageStorage);
+
+            //2. Add RequestQueue entry
+            RequestQueue requestQueue = new RequestQueue();
+            requestQueue.RequestedAction = queueMessage.RequestedAction;
+            requestQueue.Requesteddate = queueMessage.RequestedDate;
+            requestQueue.RequestId = queueMessage.RequestId;
+            requestQueue.RequestStatus = 0;
+            requestQueue.SourceSystem = queueMessage.SourceSystem;
+            requestQueue.TargetSystem = queueMessage.TargetSystem;
+            await requestQueue_DAO.AddRequestQueueEntryAsync(requestQueue);
+            //3. Add request in Queue
+
+            string serviceBusConnection = string.Empty;
+            ServiceBusQueue serviceBusQueue = new ServiceBusQueue(serviceBusConnection);
+            await serviceBusQueue.SendMessagesToQueueAsync("QueueName", queueMessage);
+
+
+            //4. Return Newly created request Id
+            return queueMessage.RequestId;
         }
     }
 }
