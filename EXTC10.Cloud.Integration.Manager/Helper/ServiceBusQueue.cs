@@ -1,6 +1,5 @@
 ﻿using Azure.Messaging.ServiceBus;
 using EXTC10.Cloud.Integration.Entities;
-using Microsoft.Azure.ServiceBus.Management;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -48,7 +47,7 @@ namespace EXTC10.Cloud.Integration.Manager.Helper
                     PartitionKey = queueMessage.RouteName
                 };
 
-                await CreateServiceBusIfNotExists(queueName).ConfigureAwait(false);
+               // await CreateServiceBusIfNotExists(queueName).ConfigureAwait(false);
                 
                 await using var client = new ServiceBusClient(ServiceBusConnectionStrings);
                 // create the sender
@@ -71,7 +70,7 @@ namespace EXTC10.Cloud.Integration.Manager.Helper
         /// </summary>
         /// <param name="queueName">The queue name.</param>
         /// <returns>A Task.</returns>
-        private async Task CreateServiceBusIfNotExists(string queueName)
+       /* private async Task CreateServiceBusIfNotExists(string queueName)
         {
             try
             {
@@ -98,6 +97,6 @@ namespace EXTC10.Cloud.Integration.Manager.Helper
                 throw;
             }
 
-        }
+        }*/
     }
 }

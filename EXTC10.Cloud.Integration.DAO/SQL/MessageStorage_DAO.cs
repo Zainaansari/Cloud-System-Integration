@@ -47,8 +47,8 @@ namespace EXTC10.Cloud.Integration.DAO.SQL
                 sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                 sqlCommand.CommandTimeout = 0;
 
-                sqlCommand.Parameters.AddWithValue("@RequestId", MessageStorage.RequestId);
-                sqlCommand.Parameters.AddWithValue("@Messagecontent", MessageStorage.MessageContent);
+                sqlCommand.Parameters.AddWithValue("@Request_Id", MessageStorage.RequestId);
+                sqlCommand.Parameters.AddWithValue("@Message_content", MessageStorage.MessageContent);
                 
 
 

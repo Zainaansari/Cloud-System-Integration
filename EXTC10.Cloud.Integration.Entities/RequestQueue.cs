@@ -16,4 +16,15 @@ namespace EXTC10.Cloud.Integration.Entities
         public DateTime? UpdatedDate { get; set; }
 
     }
+
+    public class IntegrationQueueResponse
+    {
+        public string RequestId { get; set; }
+
+        public string AcknoweldgeResponse { get; set; }
+
+        public int StatusCode { get; set; }
+
+        public string ErrorLog { get; set; }
+    }
 }

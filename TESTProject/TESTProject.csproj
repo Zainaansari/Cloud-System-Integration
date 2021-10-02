@@ -1,20 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Configuration.cs" />
-    <Compile Remove="MessageStore.cs" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Azure.Messaging.ServiceBus" Version="7.3.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\EXTC10.Cloud.Integration.DAO\EXTC10.Cloud.Integration.DAO.csproj" />
     <ProjectReference Include="..\EXTC10.Cloud.Integration.Entities\EXTC10.Cloud.Integration.Entities.csproj" />
   </ItemGroup>
 
