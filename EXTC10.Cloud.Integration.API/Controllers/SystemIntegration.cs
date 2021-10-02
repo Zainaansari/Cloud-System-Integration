@@ -6,24 +6,47 @@ using System.Threading.Tasks;
 using EXTC10.Cloud.Integration.Entities;
 using Newtonsoft.Json;
 using EXTC10.Cloud.Integration.Manager;
+using EXTC10.Cloud.Integration.DAO.SQL;
 
 namespace EXTC10.Cloud.Integration.API.Controllers
 {
     /// <summary>
     /// The system integration API.
     /// </summary>
+    [Route("api/SystemIntegration")]
     [ApiController]
-    [Route("[controller]")]
     public class SystemIntegration : ControllerBase
     {
-       public async Task<string> AddRequestInQueue(string requestMessage)
+
+        [HttpPost]
+        [Route("AddRequestInQueue")]
+        public async Task<string> AddRequestInQueue(QueueMessage requestMessage)
         {
-            QueueMessage queueMessage = (QueueMessage)JsonConvert.DeserializeObject(requestMessage);
+            //QueueMessage queueMessage = JsonConvert.DeserializeObject<QueueMessage>(requestMessage);
+            string connectionString = "Server=DESKTOP-LRDICV5;Database=Request_Acceptance_Service;User Id=sa;Password=Password123;";
 
-            RequestQueueManager requestQueueManager = new RequestQueueManager("Database connection");
-            await requestQueueManager.AddIntegrationRequestInQueue(queueMessage);
-
-            return string.Empty;
+            RequestQueueManager requestQueueManager = new RequestQueueManager(connectionString);
+            string integrationQueueResponse = await requestQueueManager.AddIntegrationRequestInQueue(requestMessage);
+            return integrationQueueResponse;
         }
+
+        //[HttpPost]
+        //[Route("SendRequestInQueue")]
+        public async Task<string> SendRequestInQueue(QueueMessage requestMessage)
+        {
+            //QueueMessage queueMessage = JsonConvert.DeserializeObject<QueueMessage>(requestMessage);
+            string connectionString = "Server=DESKTOP-LRDICV5;Database=Request_Acceptance_Service;User Id=sa;Password=Password123;";
+
+            RequestQueueManager requestQueueManager = new RequestQueueManager(connectionString);
+            string integrationQueueResponse = await requestQueueManager.AddIntegrationRequestInQueue(requestMessage);
+            return integrationQueueResponse;
+        }
+
     }
+
+   
+    
+
 }
+
+

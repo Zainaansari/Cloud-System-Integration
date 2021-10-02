@@ -49,12 +49,12 @@ namespace EXTC10.Cloud.Integration.DAO.SQL
                 sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                 sqlCommand.CommandTimeout = 0;
 
-                sqlCommand.Parameters.AddWithValue("@RequestId", RequestQueue.RequestId);
-                sqlCommand.Parameters.AddWithValue("@SourceSystem", RequestQueue.SourceSystem);
-                sqlCommand.Parameters.AddWithValue("@TargetSystem", RequestQueue.TargetSystem);
-                sqlCommand.Parameters.AddWithValue("@RequestedAction", RequestQueue.RequestedAction);
+                sqlCommand.Parameters.AddWithValue("@Request_Id", RequestQueue.RequestId);
+                sqlCommand.Parameters.AddWithValue("@Source_System", RequestQueue.SourceSystem);
+                sqlCommand.Parameters.AddWithValue("@Target_System", RequestQueue.TargetSystem);
+                sqlCommand.Parameters.AddWithValue("@Requested_Action", RequestQueue.RequestedAction);
                 sqlCommand.Parameters.AddWithValue("@RequestStatus", RequestQueue.RequestStatus);
-
+                sqlCommand.Parameters.AddWithValue("@Requested_date", RequestQueue.Requesteddate); 
 
                 if (sqlConnection.State == System.Data.ConnectionState.Closed)
                     await sqlConnection.OpenAsync();
